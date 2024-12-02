@@ -1,7 +1,19 @@
 "use client";
 import { signIn } from "next-auth/react"; //client side
 import Image from "next/image";
+import { useState } from "react";
 export default function SignInPage() {
+  const [message, setMessage] = useState("");
+
+  const handleSignIn = async () => {
+    try {
+      await signIn("github");
+      setMessage("Signing in with Github....");
+    } catch (error) {
+      console.error("Sign in error:", error);
+      setMessage("Error signing in. Please try again.");
+    }
+  };
   return (
     <>
       <section className="bg-[url('/images/bg4.webp')]  bg-no-repeat bg-cover flex sm:flex-row flex-col sm:justify-center py-10 lg:px-10 px-5  gap-5 items-center">
@@ -71,10 +83,11 @@ export default function SignInPage() {
               </form>
               <button
                 className="bg-black text-white md:py-3 py-2 px-8 rounded-lg cursor-pointer xs:text-[1rem] text-[0.8rem]"
-                onClick={() => signIn("github")}
+                onClick={handleSignIn}
               >
                 Signin with GitHub
               </button>
+              {message && <p className="text-purple-600">{message}</p>}
             </div>
           </div>
         </div>
